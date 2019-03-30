@@ -1,5 +1,5 @@
 ---
-- hosts: webservers
+- hosts: all
   become: yes
   tasks:
   - apt:
@@ -7,18 +7,20 @@
       state: present
       update_cache: yes
   - apt:
-      name: tomcat7
+      name: tomcat8
       state: present
       update_cache: yes
-    notify: 
-    - restart tomcat
+    notify:
+    - restart tomcat8
   - copy:
-      src: /home/ansiblie/shopizer/sm-shop/target/ROOT.war
-      dest: /var/lib/tomcat7/webapps/
-    notify: 
-    - restart tomcat7
+      src: /home/ansible/shopizer/sm-shop/target/ROOT.war
+      dest: /var/lib/tomcat8/webapps
+    notify:
+    - restart tomcat8
   handlers:
-  - name: restart tomcat
+  - name: restart tomcat8
     service:
-      name: tomcat7
+      name: tomcat8
       state: restarted
+
+
