@@ -1,0 +1,30 @@
+---
+  - hosts: webservers
+    become: yes
+    tasks:
+    - name: update packages & install apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+    - name: installing php,libapache2-mod-php,php-mcrypt,php-mysql,apache2
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes 
+      loops:
+        - php
+        - libapache2-mod-php
+        - php-mysql
+        - php-mcrypt
+        - php-cli
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
+    - name: copy info.php
+      copy:
+        src: info.php
+        dest: /var/www/html/info.php
+  

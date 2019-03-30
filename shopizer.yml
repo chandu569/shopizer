@@ -1,0 +1,24 @@
+---
+- hosts: webservers
+  become: yes
+  tasks:
+  - apt:
+      name: oracle-java8-installer
+      state: present
+      update_cache: yes
+  - apt:
+      name: tomcat7
+      state: present
+      update_cache: yes
+    notify: 
+    - restart tomcat
+  - copy:
+      src: /home/ansiblie/shopizer/sm-shop/target/ROOT.war
+      dest: /var/lib/tomcat7/webapps/
+    notify: 
+    - restart tomcat7
+  handlers:
+  - name: restart tomcat
+    service:
+      name: tomcat7
+      state: restarted
